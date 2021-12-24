@@ -26,7 +26,7 @@ III. Statistical Tests: [Homework IV](https://github.com/mhmirza/RAnalytics/tree
 
 The main question of interest was answered in the project through the following steps:
 
-1) Data processing and summarization: Insightful graphical and tabular summaries of the data
+1) <u>Data processing and summarization<u>: Insightful graphical and tabular summaries of the data
 
 2) Methodology: Dealing with missing values and topcoded variables; exploring trends and correlations; variable selection
 
