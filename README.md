@@ -4,7 +4,7 @@ This portfolio captures the work I completed for a course, **Programming in R fo
 
 # What I hope to learn?
 
-From the course, Programming in R for Analytics, I wish to learn how to use RStudio, read R documentation, and write R scripts. Moreover, I wish to learn the fundamentals of how to import, export and manipulate data. In addition, I intend to garner skills required to produce statistical summaries of continuous and categorical data; and generate basic graphics using standard functions, and produce more advanced graphics using the ggplot2 library. Finally, I wish to gain the knowledge for performing common hypothesis tests, and running simple regression models to furnish statistical analyses in R Markdown/R Notebooks.
+From the course, Programming in R for Analytics, I wish to learn how to use RStudio, read R documentation, and write R scripts. Moreover, I hope to gain an understanding of the functional challenges related to importing, exporting and manipulating data. In addition, I intend to garner skills required to produce statistical summaries of continuous and categorical data; and generate basic graphics using standard functions, and produce more advanced graphics using the ggplot2 library. Finally, I wish to gain the knowledge for performing common hypothesis tests, and running simple regression models to furnish statistical analyses in R Markdown/R Notebooks.
 
 # Portfolio
 
