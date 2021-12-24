@@ -1,10 +1,10 @@
 # RAnalytics
 
-This portfolio captures the work I completed for a course, **Programming in R for Analytics**, at Carnegie Mellon University in Fall 2020. The work done here involves: gathering data from various sources including web scraping, web API, CSV and other structured data files, and databases; data cleansing; using the Pandas library for data analysis; regular expressions and other string processing methods; classes and object-oriented programming; and building real-world software applications. To view my course repository on GitHub, please click [here](https://github.com/mhmirza/RAnalytics).
+This portfolio captures the work I completed for a course, **Programming in R for Analytics**, at Carnegie Mellon University in Fall 2020. The work done here involves: manipulating data objects, producing graphics, analyzing data using common statistical methods, and generating reproducible statistical reports. To view my course repository on GitHub, please click [here](https://github.com/mhmirza/RAnalytics).
 
 # What I hope to learn?
 
-From the course, Programming in R for Analytics, I wish to learn how to write Python applications for data analysis problems. Moreover, I wish to understand the concepts and use the constructs of Python libraries, including numpy, pandas, and the re (regular expression) package. In addition, I hope to acquire the skills needed to load, cleanse, and process data using Web API's, web scraping and/ or relational databases. Finally, I aim to familiarize myself with writing object-oriented programs.
+From the course, Programming in R for Analytics, I wish to learn how to use RStudio, read R documentation, and write R scripts. Moreover, I wish to learn the fundamentals of how to import, export and manipulate data. In addition, I intend to garner skills required to produce statistical summaries of continuous and categorical data; and generate basic graphics using standard functions, and produce more advanced graphics using the ggplot2 library. Finally, I wish to gain the knowledge for performing common hypothesis tests, and running simple regression models to furnish statistical analyses in R Markdown/R Notebooks.
 
 # Portfolio
 
