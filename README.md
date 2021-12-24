@@ -14,7 +14,7 @@ Here are the assignments that I completed during the course of this class.
 
 To view the assignment code and output files for each, please click on the hyperlinks for folders below. 
 
-I. Tabular Summaries and Data Cleaning: [Homework II](https://github.com/mhmirza/RAnalytics/tree/main/Homework%20II)
+I. <u>Tabular Summaries and Data Cleaning: [Homework II](https://github.com/mhmirza/RAnalytics/tree/main/Homework%20II)
 
 II. Data Visualization: [Homework III](https://github.com/mhmirza/RAnalytics/tree/main/Homework%20III)
 
