@@ -14,13 +14,11 @@ Here are the assignments that I completed during the course of this class.
 
 To view the assignment prompt, data, code files for each, please click on the hyperlinks for folders below. 
 
-I. Data Analysis Using Pandas: [Homework II]()
+I. Tabular Summaries and Data Cleaning: [Homework II](https://github.com/mhmirza/RAnalytics/tree/main/Homework%20II)
 
-II. Data Processing Using SQLite: [Homework III]()
+II. Data Visualization: [Homework III](https://github.com/mhmirza/RAnalytics/tree/main/Homework%20III)
 
-III. Regular Expressions and Web API's: [Homework IV]()
-
-IV. Data Visualization and Object Oriented Programming: [Homework V]() 
+III. Statistical Tests: [Homework IV](https://github.com/mhmirza/RAnalytics/tree/main/Homework%20IV)
 
 # Final Project
 
