@@ -12,7 +12,7 @@ Here are the assignments that I completed during the course of this class.
 
 # Assignments
 
-To view the assignment prompt, data, code files for each, please click on the hyperlinks for folders below. 
+To view the assignment code and output files for each, please click on the hyperlinks for folders below. 
 
 I. Tabular Summaries and Data Cleaning: [Homework II](https://github.com/mhmirza/RAnalytics/tree/main/Homework%20II)
 
@@ -32,7 +32,8 @@ III. Statistical Tests: [Homework IV](https://github.com/mhmirza/RAnalytics/tree
 
 To view the different components of the project, please click on the hyperlinks for each part below. Note that the funcionality of the code may require you to add your Google Maps API key instead of the one used here.
 
-* [Project Prompt]()
-* [Python Code]()
-* [Application User Instructions]()
-* [Final Presentation]()
+* [Project Prompt](https://github.com/mhmirza/RAnalytics/blob/main/Final%20Project/Final%20Project%20Prompt.pdf)
+* [Data](https://github.com/mhmirza/RAnalytics/blob/main/Final%20Project/nlsy97_Nov2020.csv)
+* [Data Description](https://github.com/mhmirza/RAnalytics/blob/main/Final%20Project/nlsy97_codebook.txt)
+* [R Code](https://github.com/mhmirza/RAnalytics/blob/main/Final%20Project/Final%20Project%20Submission.Rmd)
+* [HTML Output](https://github.com/mhmirza/RAnalytics/blob/main/Final%20Project/Final%20Project%20Submission.html)
