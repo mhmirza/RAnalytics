@@ -14,7 +14,7 @@ Here are the assignments that I completed during the course of this class.
 
 To view the assignment code and output files for each, please click on the hyperlinks for folders below. 
 
-I. <u>Tabular Summaries and Data Cleaning: [Homework II](https://github.com/mhmirza/RAnalytics/tree/main/Homework%20II)
+I. Tabular Summaries and Data Cleaning: [Homework II](https://github.com/mhmirza/RAnalytics/tree/main/Homework%20II)
 
 II. Data Visualization: [Homework III](https://github.com/mhmirza/RAnalytics/tree/main/Homework%20III)
 
@@ -26,13 +26,13 @@ III. Statistical Tests: [Homework IV](https://github.com/mhmirza/RAnalytics/tree
 
 The main question of interest was answered in the project through the following steps:
 
-1) <u>Data processing and summarization<u>: Insightful graphical and tabular summaries of the data
+1) **Data processing and summarization:** Insightful graphical and tabular summaries of the data
 
-2) Methodology: Dealing with missing values and topcoded variables; exploring trends and correlations; variable selection
+2) **Methodology:** Dealing with missing values and topcoded variables; exploring trends and correlations; variable selection
 
-3) Findings: Tabular summaries; graphical Summaries; regression and interpretation of coefficients; assessment of statistical significance
+3) **Findings:** Tabular summaries; graphical Summaries; regression and interpretation of coefficients; assessment of statistical significance
 
-4) Discussion: Potential confounders; model fit limitations; confidence in results for policy makers
+4) **Discussion:** Potential confounders; model fit limitations; confidence in results for policy makers
 
 To view the different components of the project, please click on the hyperlinks for each part below.
 
