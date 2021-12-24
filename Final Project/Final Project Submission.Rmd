@@ -1,0 +1,1420 @@
+---
+title: "Final Project_Group 1"
+output:
+  html_document:
+    theme: paper
+    highlight: tango
+    toc: true
+    toc_depth: 3
+    fig_width: 7
+    fig_height: 5
+date: "December 14, 2020"
+author: "Group 1- Hajra Shahab (hshahab), Raja Safiullah (rsafiull), Mohammad Mirza (mmmirza), Mohammad Mansur (mmansur)"
+---
+
+```{r, echo = FALSE, message = FALSE} 
+library(tidyverse)
+library(knitr)
+#install.packages("GGally")
+library(GGally)
+```
+
+### 1.Introduction 
+
+#### a. Problem Statement 
+
+Is there a significant difference in income between men and women? Does the difference vary depending on other factors discussed below?
+
+To address this problem, we will use the **NLSY97 (National Longitudinal Survey of Youth, 1997 cohort)** data set.
+
+```{r, echo = FALSE, message = FALSE}
+# Import starting data
+nlsy <- read_csv("http://www.andrew.cmu.edu/user/achoulde/94842/final_project/nlsy97/nlsy97_Nov2020.csv")
+```
+
+#### b. Changing column names 
+We have changed column names for **19** variables which we believe to have an impact on income gap between male and female 
+
+```{r, echo = FALSE}
+colnames(nlsy) <- c("PSTRAN_GPA.01_PSTR",
+    "total.incarcerations", #INCARC_TOTNUM
+    "INCARC_AGE_FIRST_XRND",
+    "INCARC_LENGTH_LONGEST_XRND",
+    "PUBID_1997",
+    "YSCH-36400_1997",
+    "YSCH-37000_1997",
+    "YSAQ-010_1997",
+    "marijuana", #YSAQ-369_1997
+    "YEXP-300_1997",
+    "high.school.diploma", #YEXP-1500_1997
+    "YEXP-1600_1997",
+    "parenthood.by.20", #YEXP-1800_1997
+    "chance.college.degree", #YEXP-2000_1997
+    "sex",
+    "KEY_BDATE_M_1997",
+    "KEY_BDATE_Y_1997",
+    "hard.times", #PC8-090_1997
+    "PC8-092_1997",
+    "work.limitation", #PC9-002_1997
+    "PC12-024_1997",
+    "PC12-028_1997",
+    "CV_AGE_12/31/96_1997", 
+    "CV_BIO_MOM_AGE_CHILD1_1997",
+    "CV_BIO_MOM_AGE_YOUTH_1997",
+    "citizenship", #CV_CITIZENSHIP_1997
+    "CV_ENROLLSTAT_1997",
+    "CV_HH_NET_WORTH_P_1997", 
+    "CV_YTH_REL_HH_CURRENT_1997",
+    "CV_MSA_AGE_12_1997",
+    "CV_URBAN-RURAL_AGE_12_1997",
+    "CV_SAMPLE_TYPE_1997",
+    "CV_HGC_BIO_DAD_1997",
+    "mother.edu", #CV_HGC_BIO_MOM_1997
+    "father.edu", #CV_HGC_RES_DAD_1997
+    "CV_HGC_RES_MOM_1997",
+    "race",
+    "YSCH-6800_1998",
+    "YSCH-7300_1998",
+    "hard.drugs", #YSAQ-372B_1998
+    "YSAQ-371_2000",
+    "YSAQ-282J_2002",
+    "YSAQ-282Q_2002",
+    "CV_HH_NET_WORTH_Y_2003",
+    "CV_BA_CREDITS.01_2004",
+    "YSAQ-000B_2004",
+    "YSAQ-373_2004",
+    "YSAQ-369_2005",
+    "CV_BIO_CHILD_HH_2007", 
+    "YTEL-52~000001_2007",
+    "YTEL-52~000002_2007",
+    "YTEL-52~000003_2007",
+    "YTEL-52~000004_2007",
+    "CV_BIO_CHILD_HH_2009",
+    "public.private", # CV_COLLEGE_TYPE.01
+    "CV_INCOME_FAMILY_2011",
+    "CV_HH_SIZE_2011",
+    "CV_HH_UNDER_18_2011",
+    "CV_HH_UNDER_6_2011",
+    "highest.degree", #CV_HIGHEST_DEGREE_1112_2011
+    "CV_BIO_CHILD_HH_2011",
+    "YSCH-3112_2011",
+    "YSAQ-000A000001_2011",
+    "YSAQ-000A000002_2011",
+    "YSAQ-000B_2011",
+    "YSAQ-360C_2011",
+    "YSAQ-364D_2011",
+    "YSAQ-371_2011",
+    "YSAQ-372CC_2011",
+    "YSAQ-373_2011",
+    "YSAQ-374_2011",
+    "emp_industry_2011", #YEMP_INDCODE-2002.01_2011 
+    "CV_BIO_CHILD_HH_2015",
+    "emp_industry_2017", #YEMP_INDCODE-2002.01_2017 
+    "job.type", #YEMP_OCCODE-2002.01
+    "marital.status", #CV_MARSTAT_COLLAPSED
+    "YINC-1400_2017",
+    "income", #YINC-1700
+    "YINC-1800_2017",
+    "YINC-2400_2017",
+    "YINC-2600_2017",
+    "YINC-2700_2017",
+    "CVC_YTH_REL_HH_AGE6_YCHR_XRND",
+    "CVC_SAT_MATH_SCORE_2007_XRND",
+    "CVC_SAT_VERBAL_SCORE_2007_XRND",
+    "CVC_ACT_SCORE_2007_XRND",
+    "CVC_HH_NET_WORTH_20_XRND",
+    "CVC_HH_NET_WORTH_25_XRND",
+    "CVC_ASSETS_FINANCIAL_25_XRND",
+    "CVC_ASSETS_DEBTS_20_XRND",
+    "CVC_HH_NET_WORTH_30_XRND",
+    "CVC_HOUSE_VALUE_30_XRND",
+    "CVC_HOUSE_TYPE_30_XRND",
+    "CVC_ASSETS_FINANCIAL_30_XRND",
+    "CVC_ASSETS_DEBTS_30_XRND")
+```
+
+#### c. Creating a subset for selected columns 
+
+Below is the list of shortlisted variables and the reasons behind their selection
+
+1. **total.incarcerations**: Imprisonment gives information on criminal history that can affect job and income levels
+2. **marijuana**: Drug use such as of marijuana may affect day to day performance and income 
+3. **sex**: We want to use this in our hypothesis to assess income gap between male and female 
+4. **marital.status**: Consider whether marital status has any effect on income gap between male and female. For example, a divorced individual may have to work twice as hard to make ends meet possibly leading to a higher income.
+5. **high.school.diploma**: High school diploma may determine an individual's entry in formal or informal job market 
+6. **parenthood.by.20**: Early parenthood can affect job opportunities and income levels due to greater child-rearing responsibilities at home 
+7. **chance.college.degree**: Consider whether having a college degree increases income prospects for male and female
+8. **hard.times**: Hard times can affect performance at work and hence affect income levels 
+9. **work.limitation**: Physical, mental and emotional conditions that limits one's performance at work
+10. **citizenship**: US citizenship may increase one's chance of landing a higher salary paying job in the US
+11. **mother.edu**: Individual's background such as parents' education may have impact on individual's income
+12. **father.edu**: Individual's background such as parents' education may have impact on individual's income
+13. **race**: Individuals from different races may face different income levels 
+14. **hard.drugs**: Hard drugs can affect an individual's day to day functioning and affect income  
+15. **public.private**: Attending a public vs. private education institute may affect income 
+16. **highest.degree**: Highest degree achieved may also explain difference in income 
+17. **emp_industry**: Belonging to a particular job industry may affect income 
+18. **job.type**: Belonging to a particular job type may affect income 
+19. **income**:We want to use income to assess income gaps between male and female 
+
+#### d. Understanding the data 
+After creating a subset, we can see that all our selected variables are numeric. We can do so by running a `str` command in our analysis. Our `renamed_nlsy1` dataset returns **5053** rows and **19** columns. The original data has 8984 rows and 95 variables/ columns. As we placed a `filter` command on our `income` and `total.incarcerations` variable, i.e. greater than zero, the dataset drops all rows with `income` and `total.incarcerations` less than zero and returns **5053** rows. The negatives values in the dataset provide data points for missing values (-1 for refusal, -2 dont know, -3 invalid skip, -4 valid skip, -5 non-interview). Since all these values do not record any income level or incarcerations, we decided to let go of them.
+
+Currently, we can see that the data types are set to numeric for all variables. Their category labels are listed in the variable codebook which will be handled later in data cleaning part.  
+
+```{r}
+renamed_nlsy1 <- nlsy %>%
+  filter( income > 0 & total.incarcerations >= 0) %>%
+  select(
+  "total.incarcerations", 
+  "marijuana",
+  "sex", 
+  "marital.status",
+  "high.school.diploma", 
+  "parenthood.by.20", 
+  "chance.college.degree", 
+  "hard.times", 
+  "work.limitation", 
+  "citizenship", 
+  "mother.edu",
+  "father.edu",
+  "race", 
+  "hard.drugs", 
+  "public.private", 
+  "highest.degree", 
+  "emp_industry_2011", 
+  "job.type", 
+  "income")
+```
+
+```{r, echo= FALSE}
+dim(renamed_nlsy1)
+str(renamed_nlsy1)
+```
+
+### 2. Cleaning the data 
+a. For better data analysis, we have changed numeric data types for all columns to factor types except for total incarcerations and income. These factor data type will help us create categories as listed in the variable codebook. The following steps were implemented:
+1. Set functions to create and reorder categories as listed in the variable codebook
+2. Apply functions on each variable to reorganize the column
+3. Mutate each variable to `as.factor` to convert from numeric to factor data type.
+
+#handle emp_industry and job type - discuss with everyone 
+
+b. For factor variables, negatives values were treated such that refusal(-1), don't know(-2), invalid skip (-3), valid skip (-4), non-interview(-5) were assigned to the `missing` category. After looking into each negative value's description, we see that while refusals could convey meaningful information for variables such as `marijuana` use, we have still grouped them as `missing` due to their negligible count relative to other categories for that variable. This helped us in getting a count of `missing` values for each variable. Moving forward, we decided to drop variables with a large % of `missing`. We set our threshold to **40%** which meant that if missing values comprise more than **40%** of a variable, it would not convey any meaningful information for the chosen variables. By this measure, we decided to let go of `high.school.diploma`, `parenthood.by.20`, `chance.college.degree`, and `public.private`. 
+
+```{r, echo = FALSE, message = FALSE}
+#set function to create categories for each variable 
+set.occupation <- function(x){
+  if(x < 0){
+    return("missing")
+  } else if(x >= 10 & x <= 430){
+    return("EXECUTIVE, ADMINISTRATIVE AND MANAGERIAL")
+  } else if(x >= 500 & x <= 950){
+    return("MANAGEMENT RELATED")
+  } else if(x >= 1000 & x <= 1240){
+    return("MATHEMATICAL AND COMPUTER SCIENTISTS")
+  } else if(x >= 1300 & x <= 1530){
+    return("ENGINEERS, ARCHITECTS, AND SURVEYORS")
+  } else if(x >= 1540 & x <= 1560){
+    return("ENGINEERING AND RELATED TECHNICIANS")
+  } else if(x >= 1600 & x <= 1760){
+    return("PHYSICAL SCIENTISTS")
+  } else if(x >= 1800 & x <= 1860){
+    return("SOCIAL SCIENTISTS AND RELATED WORKERS")
+  } else if(x >= 1900 & x <= 1960){
+    return("LIFE, PHYSICAL, AND SOCIAL SCIENCE TECHNICIANS")
+  } else if(x >= 2000 & x <= 2060){
+    return("COUNSELORS, SOCIAL, AND RELIGIOUS WORKERS")
+  } else if(x >= 2100 & x <= 2150){
+    return("LAWYERS, JUDGES, AND LEGAL SUPPORT WORKERS")
+  } else if(x >= 2200 & x <= 2340){
+    return("TEACHERS")
+  } else if(x >= 2400 & x <= 2550){
+    return("EDUCATION, TRAINING, AND LIBRARY WORKERS")
+  } else if(x >= 2600 & x <= 2760){
+    return("ENTERTAINERS AND PERFORMERS, SPORTS AND RELATED WORKERS")
+  } else if(x >= 2800 & x <= 2960){
+    return("MEDIA AND COMMUNICATION WORKERS")
+  } else if(x >= 3000 & x <= 3260){
+    return("HEALTH DIAGNOSIS AND TREATING PRACTITIONERS")
+  } else if(x >= 3300 & x <= 3650){
+    return("HEALTH CARE TECHNICAL AND SUPPORT")
+  } else if(x >= 3700 & x <= 3950){
+    return("PROTECTIVE SERVICE")
+  } else if(x >= 4000 & x <= 4160){
+    return("FOOD PREPARATIONS AND SERVING RELATED")
+  } else if(x >= 4200 & x <= 4250){
+    return("CLEANING AND BUILDING SERVICE")
+  } else if(x >= 4300 & x <= 4430) {
+    return("ENTERTAINMENT ATTENDANTS AND RELATED WORKERS")
+  } else if(x == 4460) {
+    return("FUNERAL RELATED OCCUPATIONS")
+  } else if(x >= 4500 & x <= 4650) {
+    return("PERSONAL CARE AND SERVICE WORKERS")
+  } else if(x >= 4700 & x <= 4960) {
+    return("SALES AND RELATED WORKERS")
+  } else if(x >= 5000 & x <= 5930) {
+    return("OFFICE AND ADMINISTRATIVE SUPPORT WORKERS")
+  } else if(x >= 6000 & x <= 6130) {
+    return("FARMING, FISHING, AND FORESTRY")
+  } else if(x >= 6200 & x <= 6940) {
+    return("CONSTRUCTION TRADES AND EXTRACTION WORKERS")
+  } else if(x >= 7000 & x <= 7620) {
+    return("INSTALLATION, MAINTENANCE, AND REPAIR WORKERS")
+  } else if(x >= 7700 & x <= 7750) {
+    return("PRODUCTION AND OPERATING WORKERS")
+  } else if(x >= 7800 & x <= 7850) {
+    return("FOOD PREPARATION")
+  } else if(x >= 7900 & x <= 8960) {
+    return("SETTER, OPERATORS, AND TENDERS")
+  } else if(x >= 9000 & x <= 9750) {
+    return("TRANSPORTATION AND MATERIAL MOVING WORKERS")
+  } else if(x >= 9800 & x <= 9840) {
+    return("MILITARY SPECIFIC OCCUPATIONS")
+  } else if(x >= 9950 & x <= 9990) {
+    return("ACS SPECIAL CODES")
+  }
+}
+
+set.industry.2017 <- function(x){
+  if(x < 0){
+    return("missing")
+  } else if(x >= 170 & x <= 290){
+    return("AGRICULTURE, FORESTRY AND FISHERIES")
+  } else if(x >= 370 & x <= 490){
+    return("MINING")
+  } else if(x >= 570 & x <= 690){
+    return("UTILITIES")
+  } else if(x == 770){
+    return("CONSTRUCTION")
+  } else if(x >= 1070 & x <= 3990){
+    return("MANUFACTURING")
+  } else if(x >= 4070 & x <= 4590){
+    return("WHOLESALE TRADE")
+  } else if(x >= 4670 & x <= 5790){
+    return("RETAIL TRADE")
+  } else if(x == 5890){
+    return("ARTS, ENTERTAINMENT AND RECREATION SERVICES")
+  } else if(x >= 6070 & x <= 6390){
+    return("TRANSPORTATION AND WAREHOUSING")
+  } else if(x >= 6470 & x <= 6780){
+    return("INFORMATION AND COMMUNICATION")
+  } else if(x >= 6870 & x <= 7190){
+    return("FINANCE, INSURANCE, AND REAL ESTATE")
+  } else if(x >= 7270 & x <= 7790){
+    return("PROFESSIONAL AND RELATED SERVICES")
+  } else if(x >= 7860 & x <= 8470){
+    return("EDUCATIONAL, HEALTH, AND SOCIAL SERVICES")
+  } else if(x >= 8560 & x <= 8690){
+    return("ENTERTAINMENT, ACCOMODATIONS, AND FOOD SERVICES")
+  } else if(x >= 8770 & x <= 9290){
+    return("OTHER SERVICES")
+  } else if(x >= 9370 & x <= 9590){
+    return("PUBLIC ADMINISTRATION")
+  } else if(x >= 9670 & x <= 9890){
+    return("ACTIVE DUTY MILITARY")
+  } else if(x >= 9950 & x <= 9990){
+    return("ACS SPECIAL CODES")
+  }
+}
+
+set.highest.degree <- function(x){
+  if(x == 0){
+    return("None")
+  } else if(x == 1){
+    return("GED")
+  } else if(x == 2){
+    return("High school diploma 12 year")
+  } else if(x == 3){
+    return("Associate/Junior college (AA)")
+  } else if(x == 4){
+    return("Bachelor's degree (BA, BS)")
+  } else if(x == 5){
+    return("Master's degree (MA, MS)")
+  } else if(x == 6){
+    return("PhD")
+  } else if(x == 7){
+    return("Professional degree (DDS, JD, MD)")
+  } else {
+    return("missing")
+  }
+}
+
+set.public.private <- function(x){
+  if(x == 1){
+    return("Public institution")
+  } else if(x == 2){
+    return("Private not-for-profit institution")
+  } else if(x == 3){
+    return("Private for-profit institution")
+  } else {
+    return("missing")
+  }
+}
+
+set.race <- function(x) {
+  if(x == 1){
+    return("Black")
+  } else if(x == 2){
+    return("Hispanic")
+  } else if(x == 3){
+    return("Mixed Race (Non-Hispanic)")
+  } else if(x == 4){
+    return("Non-Black / Non-Hispanic")
+  }
+}
+
+set.citizenship <- function(x) {
+  if(x == 1){
+    return("US.born.citizen")
+  } else if(x == 2){
+    return("Unknown.not.us.born")
+  } else if(x == 3){
+    return("unknown.birthplace")
+  } else if(x < 0){
+    return("missing")
+  }
+}
+
+set.yes.no.missing <- function(x) {
+  if(x == 0){
+    return("no")
+  } else if(x == 1) {
+    return("yes")
+  } else if(x < 0) {
+    return("missing")
+  }
+}
+
+recode.chance.variables <- function(x) {
+    if(x < 0){
+      return("missing")
+    } else if(x == 0){
+      return("0%")
+    } else if(x >= 1 & x <= 10) {
+      return("1%-10%")
+    } else if(x >= 11 & x <= 20) {
+      return("11%-20%")
+    }else if(x >= 21 & x <= 30) {
+      return("21%-30%")
+    }else if(x >= 31 & x <= 40) {
+      return("31%-40%")
+    }else if(x >= 41 & x <= 50) {
+      return("41%-50%")
+    }else if(x >= 51 & x <= 60) {
+      return("51%-60%")
+    }else if(x >= 61 & x <= 70) {
+      return("61%-70%")
+    }else if(x >= 71 & x <= 80) {
+      return("71%-80%")
+    }else if(x >= 81 & x <= 90) {
+      return("81%-90%")
+    }else if(x >= 91 & x <= 100) {
+      return("91%-100%")
+    }
+}
+
+rename.marital.status <- function(x) {
+  if(x < 0) {
+    return("missing")
+  } else if(x == 0){
+    return("Never married")
+  } else if(x == 1){
+    return("Married")
+  } else if(x == 2){
+    return("Separated")
+  } else if(x == 3){
+    return("Divorced")
+  } else if(x == 4){
+    return("Widowed")
+  }
+}
+
+
+```
+
+
+```{r, echo = FALSE, message = FALSE}
+
+renamed_nlsy1 <- data.frame(renamed_nlsy1)
+class(renamed_nlsy1)
+renamed_nlsy1 <- renamed_nlsy1 %>%
+  mutate(marijuana = recode_factor(marijuana,
+                                      `0` = "no",
+                                      `1` = "yes",
+                                   `-1` = "missing",
+                                   `-2` = "missing",
+                                   `-3` = "missing",
+                                   `-4` = "missing",
+                                   `-5` = "missing"),
+         sex = recode_factor(sex,
+                             `1` = "Male",
+                             `2` = "Female"),
+         high.school.diploma = sapply(high.school.diploma,
+                                     recode.chance.variables),
+         parenthood.by.20 = sapply(parenthood.by.20, 
+                                 recode.chance.variables),
+         chance.college.degree = sapply(chance.college.degree, 
+                                 recode.chance.variables),
+         hard.times = sapply(hard.times, 
+                                 set.yes.no.missing),
+         marital.status = sapply(marital.status,
+                                 rename.marital.status),
+         work.limitation = sapply(work.limitation,
+                                  set.yes.no.missing),
+         citizenship = sapply(citizenship,
+                              set.citizenship),
+         mother.edu = recode_factor(mother.edu,
+                                    `-1` = "missing",
+                                    `-2` = "missing",
+                                    `-3` = "missing",
+                                    `-4` = "missing",
+                                    `-5` = "missing",
+                                    `0` = "NONE",
+                                    `1` = "1ST GRADE",
+                                    `2` = "2ND GRADE",
+                                    `3` = "3RD GRADE",
+                                    `4` = "4TH GRADE",
+                                    `5` = "5TH GRADE",
+                                    `6` = "6TH GRADE",
+                                    `7` = "7TH GRADE",
+                                    `8` = "8TH GRADE",
+                                    `9` = "9TH GRADE",
+                                    `10` = "10TH GRADE",
+                                    `11` = "11TH GRADE",
+                                    `12` = "12TH GRADE",
+                                    `13` = "1ST YEAR COLLEGE",
+                                    `14` = "2ND YEAR COLLEGE",
+                                    `15` = "3RD YEAR COLLEGE",
+                                    `16` = "4TH YEAR COLLEGE",
+                                    `17` = "5TH YEAR COLLEGE",
+                                    `18` = "6TH YEAR COLLEGE",
+                                    `19` = "7TH YEAR COLLEGE",
+                                    `20` = "8TH YEAR COLLEGE",
+                                    `95` = "UNGRADED"),
+         father.edu = recode_factor(father.edu,
+                                    `-1` = "missing",
+                                    `-2` = "missing",
+                                    `-3` = "missing",
+                                    `-4` = "missing",
+                                    `-5` = "missing",
+                                    `0` = "NONE",
+                                    `1` = "1ST GRADE",
+                                    `2` = "2ND GRADE",
+                                    `3` = "3RD GRADE",
+                                    `4` = "4TH GRADE",
+                                    `5` = "5TH GRADE",
+                                    `6` = "6TH GRADE",
+                                    `7` = "7TH GRADE",
+                                    `8` = "8TH GRADE",
+                                    `9` = "9TH GRADE",
+                                    `10` = "10TH GRADE",
+                                    `11` = "11TH GRADE",
+                                    `12` = "12TH GRADE",
+                                    `13` = "1ST YEAR COLLEGE",
+                                    `14` = "2ND YEAR COLLEGE",
+                                    `15` = "3RD YEAR COLLEGE",
+                                    `16` = "4TH YEAR COLLEGE",
+                                    `17` = "5TH YEAR COLLEGE",
+                                    `18` = "6TH YEAR COLLEGE",
+                                    `19` = "7TH YEAR COLLEGE",
+                                    `20` = "8TH YEAR COLLEGE",
+                                    `95` = "UNGRADED"),
+         race = sapply(race,
+                       set.race),
+         hard.drugs = sapply(hard.drugs,
+                             set.yes.no.missing),
+         public.private = sapply(public.private,
+                                 set.public.private),
+         highest.degree = sapply(highest.degree,
+                                 set.highest.degree),
+         emp_industry_2011 = sapply(emp_industry_2011,
+                             set.industry.2017),
+         job.type = sapply(job.type,
+                           set.occupation))
+
+#calculating count to find total missing values for each variable 
+colSums(renamed_nlsy1 == "missing") %>%
+  kable (format = "markdown", caption = "Count of Missing Values")
+```
+
+```{r, echo =FALSE, message = FALSE}
+renamed_nlsy1 <- mutate (renamed_nlsy1, 
+                        high.school.diploma = as.factor(high.school.diploma),
+                        parenthood.by.20 = as.factor(parenthood.by.20),
+                        chance.college.degree = as.factor(chance.college.degree),
+                        hard.times = as.factor(hard.times),
+                        marital.status = as.factor(marital.status),
+                        work.limitation = as.factor(work.limitation),
+                        citizenship = as.factor(citizenship),
+                        mother.edu = as.factor (mother.edu),
+                        father.edu = as.factor (father.edu),
+                        race = as.factor (race),
+                        hard.drugs = as.factor (hard.drugs),
+                        public.private = as.factor (public.private),
+                        highest.degree = as.factor (highest.degree), 
+                        emp_industry_2011 = as.factor(emp_industry_2011),
+                        job.type = as.factor(job.type)) 
+
+str(renamed_nlsy1)
+```
+
+### 3. Exploratory analysis and summaries 
+
+#### a. Getting to know our two main variables
+
+Using summary, we can see that `median` income is **40,000** while `mean` is **49,781**. The `lower quartile` and `upper quartlie` is **25,000** and **62,000** respectively. As mean > median, we can conclude that the data is right-skewed which could be explained by the topcoded values. This analysis is further verified as we plot our density graph for male and female. We also see that female density is greater than males for lower income levels. Using table for sex, we can observe that male and female count is **2600** and **2453** respectively which roughly divides our sample equally over two genders. As seen in the histogram plotted for income within each gender, we see that the distribution of income is not normal for both Males and Females. Similarly, we do see presence of outliers which we believe are due to topcoded income values. Moreover, upon a closer look at the graph, we see that men have their values clustered around a higher income value compared to females.
+
+```{r, echo = FALSE, message = TRUE}
+
+summary(renamed_nlsy1$income)
+table(renamed_nlsy1$race)
+
+base.plot <- ggplot(renamed_nlsy1, aes(x = income))
+base.plot + geom_density(aes(fill = race), alpha = 0.5) + ggtitle("Income Distribution by Race") 
+```
+
+```{r, echo = FALSE}
+gender.income <- ggplot(data = renamed_nlsy1, aes(x = income, fill = sex))
+
+gender.income + geom_histogram(bins = 30) + facet_grid(. ~ sex) +
+  ylab("Frequency") +  
+  xlab("Income($)") +
+  ggtitle("Income Distribution by Sex") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5), legend.position = 'none')
+```
+
+#### b. Dealing with top-coded values 
+
+**121** of the incomes are topcoded to the maximum value of **$235,884**. This is the average value of top **121** income earners. We confirmed this using the `slice_max` function, which pulled out the top **2%** rows from our `renamed_nlsy1` dataset based on `income`. In order to understand the topcoded values and their implication on our analysis, we first drew a histogram to discern the distribution of income for each gender. We also constructed the **QQ-plot** to check if the data is normal. From the graphs, as expected, the distribution had a right skew due to the presence of outliers because of which the data did not appear to be normal.
+Given this scenario, we decided to remove the topcoded values to ensure that they do not distort our analysis. This gave birth to the `renamed_nlsy` dataset, and plotting the **QQ-plot** for the same allows us to see a relative improvement in the normality of the income distribution.
+
+
+```{r, echo = FALSE, message = TRUE}
+p.renamed_nlsy1 <- ggplot(data = renamed_nlsy1, aes(sample = income))
+p.renamed_nlsy1 + stat_qq() + stat_qq_line() + facet_grid(. ~ sex) + ggtitle("QQ-plots")
+
+#renamed_nlsy1 %>% slice_max(income, n = nrow(renamed_nlsy1) * 0.02) 
+```
+
+```{r, echo = FALSE, message = FALSE}
+renamed_nlsy <-subset(renamed_nlsy1, income!= max(renamed_nlsy1$income))
+nrow(renamed_nlsy)
+```
+
+```{r, echo = FALSE}
+p.renamed_nlsy <- ggplot(data = renamed_nlsy, aes(sample = income))
+p.renamed_nlsy + stat_qq() + stat_qq_line() + facet_grid(. ~ sex) + ggtitle("QQ-plots")
+```
+
+```{r, echo = FALSE}
+gender.income <- ggplot(data = renamed_nlsy, aes(x = income, fill = sex))
+
+gender.income + geom_histogram(bins = 30) + facet_grid(. ~ sex) +
+  ylab("Frequency") +  
+  xlab("Income($)") +
+  ggtitle("Income Distribution by Sex") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5), legend.position = 'none')
+```
+
+#### c. Testing statistical significance of each variable on income 
+
+##### 1. **sex**
+
+From the box plot, we can observe that the median value for income is higher for males than for females. To check whether sex has a statistically significant effect on income, we run a t.test and check p-values. As the p-value is less than **0.05**, we can reject the null hypothesis and conclude that sex does affect income.This resonates with our intended analysis that sex does impact income.   
+
+```{r, echo = FALSE}
+#Step 1: Constructing a plot
+qplot(x = income, y = sex,
+      geom = "boxplot", data = renamed_nlsy,
+      xlab = "Income($)", 
+      ylab = "Sex",
+      fill = I("lightblue"), main = "Sex vs. Total Income")
+
+
+#Step 2: Creating a summary table
+renamed_nlsy %>%
+  group_by(sex) %>%
+  summarize(num.obs = n(),
+            mean.income = round(mean(income), 0),
+            sd.income = round(sd(income), 0),
+            se.income = round(sd(income) / sqrt(num.obs), 0)) %>%
+  kable(format = "markdown")
+```
+
+```{r, echo = FALSE, message = FALSE}
+
+#Step 3: running a t-test to confirm if the visual difference above is significant
+gender.t.test <- t.test(income ~ sex, data = renamed_nlsy)
+gender.t.test
+```
+
+##### 2. **marijuana**
+From the box plot, we can observe that the median income is the same whether `marijuana` was consumed or not. To check whether income gap is statistically significant between men and women within `marijuana` users and non-users, we run a t.test and visualize it with confidence interval bars in a bar graph.
+The bar graph with error bars shows us **three** things: i) The income gap between men and women is statistically significant across Marijuana users and non-users since the error bars do not contain the null hypothesis value of 0. ii) The positive bars serve as an evidence that men earn more than women in both user and non-user groups. iii) Since the error bar for users contains the height of the bar for non-users, we can say that the income gap for users is not statistically different from the non-users group. Finally, the missing category shows a wide confidence interval indicating data unreliability which is due to a low count of **19** missing values here and the income gap is also insignificant here.
+
+
+```{r, echo = FALSE}
+#VARIABLE 2: marijuana v/s income
+
+#Step 1: Constructing a plot
+qplot(x = income, y = marijuana,
+      geom = "boxplot", data = renamed_nlsy,
+      xlab = "Income($)", 
+      ylab = "Past Marijuana Usage",
+      fill = I("lightblue"), main = 'Past Marijuana Usage v/s Income')
+
+#Step 2: Creating a summary table
+renamed_nlsy %>%
+  group_by(marijuana) %>%
+  summarize(num.obs = n(),
+            mean.income = round(mean(income), 0),
+            sd.income = round(sd(income), 0),
+            se.income = round(sd(income) / sqrt(num.obs), 0)) %>%
+kable (format = "markdown")
+
+#Step 3: running t test to check the visual difference
+
+effect.of.marijuana <- renamed_nlsy %>%
+  group_by(marijuana) %>%
+  summarise(income.gap = mean(income[sex == "Male"]) - 
+              mean(income[sex == "Female"]), 
+            lower = t.test(x=income[sex=="Male"],
+                           y=income[sex=="Female"])$conf.int[1],
+            upper = t.test(x=income[sex=="Male"],
+                           y=income[sex=="Female"])$conf.int[2], 
+            .groups = 'keep', is.significant = as.factor(t.test(income ~ sex)$p.value < 0.05)) 
+
+#Step 4: plotting with error bars
+
+ggplot(effect.of.marijuana, aes(x = marijuana, y = income.gap, fill = is.significant)) +
+  geom_bar(stat = "identity") +
+  xlab ("Past Marijuana Usage") + 
+  ylab ("Income Gap ($)") +
+  ggtitle("Income gap b/w men and women, by past Marijuana Usage") +
+  theme(axis.text.x=element_text(angle = 45, vjust = 0.5)) +
+  geom_errorbar(aes(ymin=lower, ymax = upper),
+                width = .2)
+```
+
+##### 3. **marital.status**
+
+Contrary to our expectation where we expected divorced individuals to work harder to make ends meet, we see in the box plot, we can observe that the median income is the highest for married individuals which possibly be happy household conditions which means doing well at home and at work. To check whether income gap is statistically significant between men and women within different `marital.status` groups, we run a t.test and visualize it with confidence interval bars in a bar graph.
+The bar graph with error bars shows us **three** things: i) The income gap between men and women is statistically insignificant for only widowed and separated individuals since the error bars contain the null hypothesis value of 0. ii) Only the separated marital group has negative bar indicating that women are earning more than men. iii) No single error bar overlaps the height of the other bar, hence we can conclude that our results are statistically significant. Finally, the missing category has a low count therefore we do not include it in our analysis. 
+
+```{r, echo = FALSE}
+#VARIABLE 3: marital status v/s income
+
+#Step 1: Constructing a plot
+qplot(x = income, y = marital.status,
+      geom = "boxplot", data = renamed_nlsy,
+      xlab = "Income($)", 
+      ylab = "Marital Status",
+      fill = I("lightblue"), main = 'Marital Status v/s Income')
+
+#Step 2: Creating a summary table
+renamed_nlsy %>%
+  group_by(marital.status) %>%
+  summarize(num.obs = n(),
+            mean.income = round(mean(income), 0),
+            sd.income = round(sd(income), 0),
+            se.income = round(sd(income) / sqrt(num.obs), 0)) %>%
+  kable (format = "markdown")
+
+#Step 3: Running a t test
+effect.of.marital.status <- renamed_nlsy %>%
+  group_by(marital.status) %>%
+  summarize(income.gap = mean(income[sex == "Male"], na.rm = TRUE) -
+              mean(income[sex == "Female"], na.rm = TRUE),
+            lower = t.test(x = income[sex == "Male"],
+                   y = income[sex == "Female"])$conf.int[1],
+            upper = t.test(x = income[sex == "Male"],
+                   y = income[sex == "Female"])$conf.int[2], is.significant = as.factor(t.test(income ~ sex)$p.value < 0.05))
+
+#Step 4: Plotting with error bars
+effect.of.marital.status %>%
+  ggplot(aes(x = reorder(marital.status, income.gap),
+             y = income.gap, fill = is.significant)) +
+  geom_bar(stat = "identity") +
+  geom_errorbar(aes(ymin=lower, ymax = upper),
+                width = .2) +
+  xlab("Marital Status") +
+  ylab("Income Gap ($)") +
+  ggtitle("Income gap b/w men and women, by marital status") +
+  theme(axis.text.x=element_text(angle = 45, vjust = 0.5))
+```
+
+#### 4. **highest.degree**
+
+We used a density plot to visualize the income distribution for each level of educational attainment. Each distribution seems to have a right long tail indicating skewness in income when we delve into each degree level. Moreover, we run the Anova test to check whether highest degree obtained impacts income and the `p-value` i.e. `<2e-16` reflects that average income varies across degrees obtained.
+
+
+```{r, echo = FALSE}
+#VARIABLE 4: highest.degree
+renamed_nlsy %>%
+  filter(highest.degree != "missing") %>%
+  mutate(highest.degree = factor(highest.degree,
+                        levels = c("None",
+                                   "High school diploma 12 year",
+                                   "Associate/Junior college (AA)",
+                                   "GED",
+                                   "Bachelor's degree (BA, BS)",
+                                   "Master's degree (MA, MS)",
+                                   "Professional degree (DDS, JD, MD)",
+                                   "PhD"))) %>%
+  ggplot(aes(x = income)) +
+  xlab("Income") +
+  ggtitle ("Income Distributions by Highest Degree") + geom_density(aes(fill = highest.degree),
+                                                  alpha = 0.4)
+```
+
+```{r, echo = FALSE, message = FALSE} 
+summary(aov(income ~ highest.degree, data = renamed_nlsy))
+```
+##### 5. **hard.times**
+
+From the box plot, we can observe that the median income is higher for individuals who have not experienced hard times. To check whether income gap is statistically significant between men and women within group of individuals who have experienced `hard.times` and those who did not, we run a t-test and visualize it with confidence interval bars in a bar graph. The bar graph with error bars shows us **three** things: i) The income gap between men and women is statistically significant across those who have experienced hard times as well as those that have not, since the error bars do not contain the null hypothesis value of 0. ii) The positive bars serve as an evidence that men earn more than women in group of individuals who have experienced hard times as well as those who didnt. iii) Since the error bar from `yes` group contains the height of the bar from `no` group, we can say that the income gap for those who experienced hard times is not statistically different from those who did not.
+
+```{r, echo = FALSE}
+#VARIABLE 4: hard times v/s income
+#Step 1: Constructing a plot
+qplot(x = income, y = hard.times,
+      geom = "boxplot", data = renamed_nlsy,
+      xlab = "Income($)", 
+      ylab = "Hard Times",
+      fill = I("lightblue"), main = 'Hard Times v/s Income')
+
+#Step 2: Creating a summary table
+renamed_nlsy %>%
+  group_by(hard.times) %>%
+  summarize(num.obs = n(),
+            mean.income = round(mean(income), 0),
+            sd.income = round(sd(income), 0),
+            se.income = round(sd(income) / sqrt(num.obs), 0)) %>%
+  kable(format = "markdown")
+
+#Step 3: Running a t test
+effect.of.hard.times <- renamed_nlsy %>%
+  group_by(hard.times) %>%
+  summarize(income.gap = mean(income[sex == "Male"], na.rm = TRUE) -
+              mean(income[sex == "Female"], na.rm = TRUE),
+            lower = t.test(x = income[sex == "Male"],
+                   y = income[sex == "Female"])$conf.int[1],
+            upper = t.test(x = income[sex == "Male"],
+                   y = income[sex == "Female"])$conf.int[2], is.significant = as.factor(t.test(income ~ sex)$p.value < 0.05))
+
+
+#Step 4: Plotting with error bars
+
+effect.of.hard.times %>%
+  ggplot(aes(x = reorder(hard.times, income.gap),
+             y = income.gap, fill = is.significant)) +
+  geom_bar(stat = "identity") +
+  geom_errorbar(aes(ymin=lower, ymax = upper),
+                width = .2) +
+  xlab("Hard Times") +
+  ylab("Income Gap ($)") +
+  ggtitle("Income gap b/w men and women, by hard times") +
+  theme(axis.text.x=element_text(angle = 45, vjust = 0.5))
+```
+
+##### 6. **work.limitation**
+
+From the box plot, we can observe that the median income is higher for individuals who do not have any work limitations. To check whether income gap is statistically significant between men and women within group of individuals who do not have work limitations and those who do, we run a t-test and visualize it with confidence interval bars in a bar graph. The bar graph with error bars shows us **three** things: i) The income gap between men and women is statistically significant across those who do not have work limitations and those who do, since the error bars do not contain the null hypothesis value of 0. ii) The positive bars serve as an evidence that men earn more than women in group of individuals who have work limitations as well as those who do not. iii) Since the error bar from `yes` group contains the height of the bar from `no` group and vice versa, we can say that the income gap for those who have work limitations is not statistically different from those who do not.
+
+```{r, echo = FALSE}
+#VARIABLE 5: work limitation v/s income
+
+#Step 1: Constructing a plot
+qplot(x = income, y = work.limitation,
+      geom = "boxplot", data = renamed_nlsy,
+      xlab = "Income($)", 
+      ylab = "Work Limitation",
+      fill = I("lightblue"), main = 'Work Limitation v/s Income')
+
+#Step 2: Creating a summary table
+renamed_nlsy %>%
+  group_by(work.limitation) %>%
+  summarize(num.obs = n(),
+            mean.income = round(mean(income), 0),
+            sd.income = round(sd(income), 0),
+            se.income = round(sd(income) / sqrt(num.obs), 0)) %>%
+  kable(format = "markdown")
+
+#Step 3: Running a t test
+
+effect.of.work.limitation <- renamed_nlsy %>%
+  group_by(work.limitation) %>%
+  summarize(income.gap = mean(income[sex == "Male"], na.rm = TRUE) -
+              mean(income[sex == "Female"], na.rm = TRUE),
+            lower = t.test(x = income[sex == "Male"],
+                   y = income[sex == "Female"])$conf.int[1],
+            upper = t.test(x = income[sex == "Male"],
+                   y = income[sex == "Female"])$conf.int[2], is.significant = as.factor(t.test(income ~ sex)$p.value < 0.05))
+
+#Step 4: Plotting with error bars
+
+effect.of.work.limitation %>%
+  ggplot(aes(x = reorder(work.limitation, income.gap),
+             y = income.gap, fill = is.significant)) +
+  geom_bar(stat = "identity") +
+  geom_errorbar(aes(ymin=lower, ymax = upper),
+                width = .2) +
+  xlab("Work Limitation") +
+  ylab("Income Gap ($)") +
+  ggtitle("Income gap b/w men and women, by work limitation") +
+  theme(axis.text.x=element_text(angle = 45, vjust = 0.5))
+```
+
+##### 7. **mother.edu**
+From the box plot, we can observe that the median income is the highest for 1ST GRADE individuals. Given the minimal no. of observations for 1ST GRADE and UNGRADED, i.e. 4, we believe that t test would not have been accurate because the number of values were very small.The box plot is also spread out for 1ST GRADE due to the same issue. Hence, we decided to drop 1ST GRADE and UNGRADED for our statistical significance test. To check whether income gap is statistically significant between men and women within group of individuals who have different levels of mother education, we run a t-test and visualize it with confidence interval bars in a bar graph. The bar graph with error bars shows us **three** things: i) The income gap between men and women is statistically significant across have different levels of mother education except for 4th GRADE, since the error bars do not contain the null hypothesis value of 0. ii) The positive bars (excluding 4th GRADE) serve as an evidence that men earn more than women in group of individuals who have different levels of mother education. iii) Since the error bar from 2nd GRADE group contains the height of the bar from all other group, we can say that the income gap for those have different levels of mother education is not statistically different. 
+
+```{r, echo = FALSE}
+#VARIABLE 7: mother.edu v/s income 
+
+#Step 1: Constructing a plot
+qplot(x = income, y = mother.edu,
+      geom = "boxplot", data = renamed_nlsy,
+      xlab = "Income ($)", 
+      ylab = "Mother's Education",
+      fill = I("lightblue"), main = "Mother Education v/s Income")
+
+#Step 2: Creating a summary table
+renamed_nlsy %>%
+  group_by(mother.edu)%>%
+  summarize(num.obs = n(),
+            mean.income = round(mean(income), 0),
+            sd.income = round(sd(income), 0),
+            se.income = round(sd(income) / sqrt(num.obs), 0)) %>%
+  kable(format = "markdown")
+
+#Step 3: Running a t test
+
+effect.of.mother.edu <- renamed_nlsy %>%
+  filter(mother.edu != "1ST GRADE" & mother.edu != "UNGRADED") %>%
+  group_by(mother.edu) %>%
+  summarize(income.gap = mean(income[sex == "Male"], na.rm = TRUE) -
+              mean(income[sex == "Female"], na.rm = TRUE),
+            lower = t.test(x = income[sex == "Male"],
+                   y = income[sex == "Female"])$conf.int[1],
+            upper = t.test(x = income[sex == "Male"],
+                   y = income[sex == "Female"])$conf.int[2], is.significant = as.factor(t.test(income ~ sex)$p.value < 0.05))
+
+#Step 4: Plotting with error bars
+
+effect.of.mother.edu %>%
+  ggplot(aes(x = mother.edu,
+             y = income.gap, fill = is.significant)) +
+  geom_bar(stat = "identity") +
+  geom_errorbar(aes(ymin=lower, ymax = upper),
+                width = .2) +
+  xlab("Mother Education") +
+  ylab("Income Gap ($)") +
+  ggtitle("Income gap b/w men and women, by mother education") +
+  theme(axis.text.x=element_text(angle = 45, vjust = 0.5))
+```
+
+#### 8. **citizenship** 
+
+Contrary to our beliefs, we see that the median income is higher for individuals with unknown birthplace as compared to the rest. To check whether income gap is statistically significant between men and women within groups of individuals with different citizenships, we run a t-test and visualize it with confidence interval bars in a bar graph. The bar graph with error bars shows us **three** things: i) The income gap between men and women is statistically significant across individuals with different citizenships, since the error bars do not contain the null hypothesis value of 0. ii) The positive bars serve as an evidence that men earn more than women in group of individuals across different citizenships. iii) Since the error bar from anyone group contains the height of the bar from other groups, we can say that the income gap is not statistically different across citizenship. 
+
+```{r, echo = FALSE}
+#VARIABLE 8: citizenship
+
+#Step 1: Constructing a plot
+qplot(x = income, y = citizenship,
+      geom = "boxplot", data = renamed_nlsy,
+      xlab = "Income ($)", 
+      ylab = "Citizenship",
+      fill = I("lightblue"), main = 'Citizenship v/s Income')
+
+#Step 2: Creating a summary table
+renamed_nlsy %>%
+  group_by(citizenship) %>%
+  summarize(num.obs = n(),
+            mean.income = round(mean(income), 0),
+            sd.income = round(sd(income), 0),
+            se.income = round(sd(income) / sqrt(num.obs), 0)) %>%
+  kable(format = "markdown")
+
+#Step 3: running t test to check the visual difference
+
+effect.of.citizenship <- renamed_nlsy %>%
+  group_by(citizenship) %>%
+  summarise(diff = mean(income[sex == "Male"]) - 
+              mean(income[sex == "Female"]), 
+            lower = t.test(x=income[sex=="Male"],
+                           y=income[sex=="Female"])$conf.int[1],
+            upper = t.test(x=income[sex=="Male"],
+                           y=income[sex=="Female"])$conf.int[2], 
+            .groups = 'keep', is.significant = as.factor(t.test(income ~ sex)$p.value < 0.05)) 
+
+#step 4:
+ggplot(effect.of.citizenship, aes(x = citizenship, y = diff, fill = is.significant)) + geom_bar(stat = "identity") +
+  xlab ("Citizenship") + 
+  ylab ("Income Gap ($)") +
+  ggtitle("Income gap b/w men and women, by citizenship") +
+  theme(axis.text.x=element_text(angle = 45, vjust = 0.5)) +
+  geom_errorbar(aes(ymin=lower, ymax = upper),
+                width = .2)
+```
+
+#### 9. **total.incarcerations** 
+
+We were interested in exploring the correlation between income and total incarcerations within each gender. To achieve this, we created a summary table which shows that for both men and women, this correlation is negative. Upon plotting the smooth line for the linear regression model, we deduced that for the same number of incarcerations, men on average have a higher income compared to women. Moreover, the line for females suggests that the highest number of incarcerations for women is 6, whereas for men it goes beyond 10.
+
+```{r, echo = FALSE}
+renamed_nlsy %>%
+  group_by(sex) %>%
+  summarize(cor_inc_incarc = cor(total.incarcerations, income)) %>%
+  kable(format = "markdown")
+
+ggplot(renamed_nlsy, 
+       aes(x=total.incarcerations, y=income, shape = sex, color = sex)) +
+  geom_smooth(method = "lm") + 
+  ylab("Income ($)") +
+  xlab("Total Incarcerations") + 
+  ggtitle("Income by Total Incarcerations")
+```
+#### 10. **hard.drugs**
+
+As part of our exploratory analysis, we were interested in comparing the average income for men and women within users and non-users of hard drugs. This enabled us to discern that usage of hard drugs causes the average income for both the genders to fall. However, within both the groups: users and non-users of hard drugs, men have higher average income compared to females. Interestingly, as seen in the summary table, the usage of hard drugs impacts women more negatively, as indicated by a fall in average income by **3,017** in comparison to men who see a fall of only **$1,045**.Moreover, as seen in the bar graph, we see that within each group of users and non-users of hard drugs, the average income is statistically different between men and women.
+
+```{r, echo = FALSE}
+effect.of.hard.drugs <- renamed_nlsy %>%
+  filter(hard.drugs != "missing") %>%
+  group_by(hard.drugs, sex) %>%
+  summarise(mean = mean (income),
+            lower = t.test(income)$conf.int[1],
+            upper = t.test(income)$conf.int[2], .groups = 'keep') %>%
+  mutate(is.signif = as_factor (if_else(lower < 0 & upper > 0, 0, 1))) 
+
+
+ggplot(effect.of.hard.drugs, aes(x = hard.drugs, y = mean, fill = sex)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  ylab ("Average Income ($)") +
+  xlab ("Hard Drugs Usage") +
+  theme(axis.text.x=element_text(angle = 90, vjust = 0.5)) +
+  geom_errorbar(aes(ymin=lower, ymax = upper),
+                width = .2, position=position_dodge(0.9)) +
+  ggtitle("Average Income v/s Hard Drugs Usage")
+```
+
+#### 11. **race** 
+
+We wanted to explore how income gap between vary within each race for groups who have experienced hard times and those who have not. The interpretation is as follows:
+i) For Hispanic as well as Non-Black/Non-Hispanic races, the income gap between men and women is statistically significant for both groups: those who have experienced hard times and those who have not. However, the income gap between the two groups is not statistically significant. 
+ii) For the Black race, the income gap between men and women is statistically significant only for the group of individuals who have not experienced hard times. Interestingly, for the group of individuals who have experienced hard times, women earn more than men in this race but this difference is not statistically significant.
+iii) For the Mixed Race, none of the respondents shared experiencing hard times, where as those who did, do not have a statistically significant difference in income between men and women.
+
+
+```{r, echo = FALSE}
+#VARIABLE 10: race
+
+race.harddrugs <- renamed_nlsy %>%
+  filter(race != "missing" & hard.drugs != "missing") %>%
+  group_by(race, hard.drugs) %>%
+  summarise(diff = mean(income[sex == "Male"]) - 
+              mean(income[sex == "Female"]), 
+            lower = t.test(x=income[sex=="Male"],
+                           y=income[sex=="Female"])$conf.int[1],
+            upper = t.test(x=income[sex=="Male"],
+                           y=income[sex=="Female"])$conf.int[2], 
+            .groups = 'keep', is.significant = as.factor(t.test(income ~ sex)$p.value < 0.05)) 
+
+
+ggplot(race.harddrugs, aes(x = hard.drugs, y = diff, fill = is.significant)) + geom_bar(stat = "identity") +
+  xlab ("Hard Times") + 
+  ylab ("Income Gap ($)") +
+  ggtitle("Income Gap by Race & Hard Times") +
+  theme(axis.text.x=element_text(angle = 90, vjust = 0.5)) +
+  geom_errorbar(aes(ymin=lower, ymax = upper),
+                width = .2) + facet_wrap(~ race)
+```
+
+#### 12. **emp_industry**
+
+To explore the industry type variable, we decided to explore the average income and how it differs between males and females within each industry type. Although no statistical tests were performed on this data, our exploratory analysis suggests that males earn higher on average than females for all industry types except the following ACS SPECIAL CODES. This gives us an overall sense of the income gap might prevail between the two genders, notwithstanding the industry impact on income.
+
+```{r, echo = FALSE}
+sex_emp.type <- renamed_nlsy %>%
+  group_by(sex, emp_industry_2011) %>%
+  summarize(num.obs = n(),
+            mean.income = round(mean(income), 0),
+            sd.income = round(sd(income), 0),
+            se.income = round(sd(income) / sqrt(num.obs), 0)) 
+
+
+ggplot(data = sex_emp.type, aes(x=mean.income, y = sex)) +
+ geom_bar(stat = "identity") + facet_wrap(~ emp_industry_2011) + theme(axis.text.x=element_text(angle = 45, vjust = 0.5)) +
+xlab ("Average Income ($)") + ylab("Sex") + ggtitle("Average Income (M/F) for Industries")
+
+```
+
+#### 13. **father.edu**
+From the box plot, we can observe that the median income is the highest for 7TH YEAR COLLEGE individuals. Given the minimal no. of observations for 1ST GRADE i.e. 4, we believe that t test would not have been accurate because the number of values were very small. For 1ST GRADE, we do not see a box plot as there is only one observation. For UNGRADED, we do see a condensed box plot despite a small total value which we believe could just be a conicidence.  To check whether income gap is statistically significant between men and women within group of individuals who have different levels of father education, we run a t-test and visualize it with confidence interval bars in a bar graph. The bar graph with error bars shows us **three** things: i) The income gap between men and women is statistically significant across different levels of father education except 3RD, 4TH, 5TH, 6TH, and 4TH YEAR COLLEGE since the error bars do not contain the null hypothesis value of 0. ii) The positive bars serve as an evidence that men earn more than women in group of individuals who have different levels of father education. iii) Since the error bar from different group contains the height of the bar from all other group, we can say that the income gap for those have different levels of father education is not statistically different. 
+
+```{r, echo = FALSE}
+#VARIABLE 13: father.edu
+
+#Step 1: Constructing a plot
+qplot(x = income, y = father.edu,
+      geom = "boxplot", data = renamed_nlsy,
+      xlab = "Income ($)", 
+      ylab = "Father's Education",
+      fill = I("lightblue"), main = "Father Education v/s Income")
+
+#Step 2: Creating a summary table
+renamed_nlsy %>%
+  group_by(father.edu)%>%
+  summarize(num.obs = n(),
+            mean.income = round(mean(income), 0),
+            sd.income = round(sd(income), 0),
+            se.income = round(sd(income) / sqrt(num.obs), 0)) %>%
+  kable(format = "markdown")
+
+#Step 3: Running a t test
+effect.of.father.edu <- renamed_nlsy %>%
+  filter(father.edu != "1ST GRADE" & father.edu != "UNGRADED") %>%
+  group_by(father.edu) %>%
+  summarize(income.gap = mean(income[sex == "Male"], na.rm = TRUE) -
+              mean(income[sex == "Female"], na.rm = TRUE),
+            lower = t.test(x = income[sex == "Male"],
+                   y = income[sex == "Female"])$conf.int[1],
+            upper = t.test(x = income[sex == "Male"],
+                   y = income[sex == "Female"])$conf.int[2], is.significant = as.factor(t.test(income ~ sex)$p.value < 0.05))
+
+#Step 4: Plotting with error bars
+effect.of.father.edu %>%
+  ggplot(aes(x = father.edu,
+             y = income.gap, fill = is.significant)) +
+  geom_bar(stat = "identity") +
+  geom_errorbar(aes(ymin=lower, ymax = upper),
+                width = .2) +
+  xlab("Father Education") +
+  ylab("Income Gap ($)") +
+  ggtitle("Income gap b/w men and women, by father education") +
+  theme(axis.text.x=element_text(angle = 45, vjust = 0.5))
+```
+
+### 4. Findings 
+
+#### 1. Linear Regression Model 
+
+
+```{r, echo = FALSE}
+lm.basic <- lm(income ~ sex, data=renamed_nlsy) 
+summary(lm.basic)
+```
+***Confidence Level is assumed at 95% and alpha = 0.05 for p-value comparison to reject the null hypothesis***
+
+First, we ran the basic linear regression model on income against sex assuming that other variables do not impact the income variable. 
+The coefficient for gender male is absorbed in the intercept and the male average income would be 51136.7, while the Female average income would be 51136.7 + (1)(-11977.6). Both the intercept and the sexFemale coefficient are statistically significant at p-value = 2e-16 ***.
+The R^2 value is 0.03, indicating that the sex variable does not explain the variation in income to a great extent. Therefore, there is a need to add more variables from the dataset.
+
+```{r}
+lm.add.race <- lm(income ~ sex + race, data = renamed_nlsy)
+anova(lm.basic, lm.add.race)
+summary(lm.add.race)
+```
+The second linear regression we run consists of race along with sex against income. Firstly, we run the anova test for lm models with and without race to check for statistical significance. P-vale from the anova test for with and without race is 2.2e-16, indicating high statistical significance. Therefore, there is a need for the race variable in the analysis.
+The adjusted R-squared value stands at 0.07721 showing again that the variability in income is only minimally being explained by the 2nd model. 
+
+```{r}
+lm.add.race.interact <- lm(income ~ sex + race + sex*race, data = renamed_nlsy)
+anova(lm.add.race, lm.add.race.interact)
+summary(lm.add.race.interact)
+```
+The follow-up regression model to the 2nd model in which race was included, includes the race and sex interaction term. Earlier in the paper we discussed (see: interaction terms) the need for an interaction term between sex and race. The anova test reiterates the need for one, with the p-value = 0.000278 showing the statistical significance.
+
+```{r}
+lm.add.tot.incarc <- lm(income ~ sex + race + sex*race + total.incarcerations, data = renamed_nlsy)
+anova(lm.add.race.interact, lm.add.tot.incarc)
+summary(lm.add.tot.incarc)
+```
+In this regression model we added total.incarcerations variable. The anova test was conducted to check for its statistical significance. The p-value came out to be 2.2e-16, suggesting high statistical significance. 
+The adjusted R^squared value with total.incarcerations in the model is 0.0993. This is an increase in the adjusted R^squared value suggests that with increase addition of total.incarcerations more of the variability of income is being explained by the model.
+
+```{r}
+lm.add.marital.status <- lm(income ~ sex + race + sex*race + total.incarcerations + marital.status, data = renamed_nlsy)
+anova(lm.add.tot.incarc, lm.add.marital.status)
+summary(lm.add.marital.status)
+```
+In this regression model we added the variable marital.status. The anova test was carried out to check for it statistical significance. The p-value for the anova test with and without marital.status came out to be 2.2e-16, suggesting statistical significance.
+The Adjusted R-squared:  0.1203 shows that there is an increase from the Adjusted R-squared value for the model without marital.status variable. This shows that greater variability of income can now be explained by the model.
+
+```{r}
+lm.add.hard.times <- lm(income ~ sex + race + sex*race + total.incarcerations + marital.status + hard.times, data = renamed_nlsy)
+anova(lm.add.marital.status, lm.add.hard.times)
+
+summary(lm.add.hard.times) 
+
+```
+In this step we are adding hard.times variable to the regression model. To check for the statistical significance of adding this variable, anova test was conducted. The p-value 0.000001279 suggests statistical significance.
+The Adjusted R-squared value came out to be 0.1226. This again, is an increase on the adjusted R-squared value we got from the model without hard.times, suggesting greater variability of income is now being accounted for.
+
+```{r}
+lm.add.work.lim <- lm(income ~ sex + race + sex*race + total.incarcerations + marital.status + hard.times + work.limitation, data = renamed_nlsy)
+anova(lm.add.hard.times, lm.add.work.lim)
+summary(lm.add.work.lim) 
+
+```
+In this step we added another variable, that is work.limitation, to the regression model. The p-value for the anova for models with and without the variable work.limitation is 5.549e-10, suggesting statistical significance.
+The adjusted R-squared value came out to be 0.1281. This suggested an increase in R-squared value from the model without the work.limitation. This again, suggests progressively greater variability of the output is being explained by the model as more relevant variables are being added.
+
+```{r}
+lm.add.highest.degree <- lm(income ~ sex + race + sex*race + total.incarcerations + marital.status + marital.status + work.limitation + highest.degree, data = renamed_nlsy)
+anova(lm.add.work.lim, lm.add.highest.degree)
+summary(lm.add.highest.degree)
+```
+Next we decided to add the variable emp_industry_2011 to our model. To find out if it was statistically significant, we ran an anova test with and without this variable. The p-value for this test came out to be 2.2e-16, suggesting a very high statistical significance.
+The Adjusted R-squared:  0.2493 shows that there is an increase from the Adjusted R-squared value for the model without emp_industry_2011. This shows that a higher amount of variability of income can be explained using this variable. This makes sense, because better employment opportunities lead to a higher income.
+
+```{r}
+lm.add.emp.ind <- lm(income ~ sex + race + sex*race + total.incarcerations + marital.status + marital.status + work.limitation + highest.degree + emp_industry_2011, data = renamed_nlsy)
+anova(lm.add.highest.degree, lm.add.emp.ind)
+summary(lm.add.emp.ind)
+```
+
+Next we decided to check with the variable highest.degree because intuitively, it also seems to affect the income variable. To find out if this was actually true and statistically significant, we ran an anova test with and without this variable. The p-value for this test came out to be 2.2e-16, suggesting a very high statistical significance.
+The Adjusted R-squared:  0.2757 shows that a lot of variability of the income variable can be explained with the variable highest.degree.
+-
+
+```{r}
+lm.add.citizenship <- lm(income ~ sex + race + sex*race + total.incarcerations + marital.status + marital.status + work.limitation + highest.degree + emp_industry_2011 + citizenship, data = renamed_nlsy)
+anova(lm.add.emp.ind, lm.add.citizenship)
+summary(lm.add.citizenship)
+```
+
+We also decided to check the variable citizenship in case there were any statistically significant differences in income because of this. The p-value came out to be 0.00000006406 which is very significant. Adjusted R squared value came out to be 0.2782 which means that citizenship does explain a lot of variability of the data, along with the other variables.
+
+```{r}
+lm.final <- lm.add.citizenship
+summary(lm.final)
+```
+
+
+
+#### 2. Collinearity
+
+Checking for collinearity between hard.drugs and hard.times
+
+We wanted to check for collinearity between hard.drugs and hard.times because we felt they captured a similar effect on income. Usage of hard drugs can be considered experiencing a hard time, and could mean collinearity between the two. 
+
+```{r, echo = FALSE, message  = FALSE}
+hard.times_hard.drugs <- c("hard.times", "hard.drugs")
+ggpairs(renamed_nlsy[,c(hard.times_hard.drugs)], axisLabels = "internal")
+```
+
+The pairs plot for hard.drugs and hard.times shows a cause for concern. The pair: ***hard.drugs = no, hard.times = no*** has a considerably larger box in the top-right plot. This box represents the group size of people who said no to both categories. Therefore, suggesting that either one would capture the effect of the other variable without having to include the other variable in the regression. This shows collinearity between hard.drugs and hard.times, allowing us to drop one of the two.
+
+```{r, echo = FALSE, message = FALSE}
+#Checking for Collinearity between hard.times and hard.drugs
+
+lm.hard.times.hard.drugs <- lm(income ~ sex + hard.times + hard.drugs, data=renamed_nlsy)
+summary(lm.hard.times.hard.drugs)
+# hard.times = 0.000059 ***, hard.drugs = 0.4400
+
+lm.hard.times.hd.ex <- lm(income ~ sex + hard.times , data=renamed_nlsy)
+anova(lm.hard.times.hd.ex, lm.hard.times.hard.drugs)
+# hard.times = 0.0000777
+lm.hard.drugs.ht.ex <- lm(income ~ sex + hard.drugs , data=renamed_nlsy)
+anova(lm.hard.drugs.ht.ex, lm.hard.times.hard.drugs)
+summary(lm.hard.times.hd.ex)
+# hard.drugs = 0.3806
+#we will drop hard.drugs and retain hard.times
+```
+
+The decision to drop either of the two: hard.drugs and hard.times depended on anova test to check the statistical significance of the remaining variable when one was dropped from the linear regression model. hard.times came out to be more statistically significant, therefore, hard.drugs was dropped.
+
+#### 3. Interaction Term 
+
+```{r, echo = FALSE, message = FALSE}
+
+#Step 1: Determining the possibility for an interaction term
+income.sex.lm <- lm(income ~ sex, data = renamed_nlsy)
+summary(income.sex.lm)
+income.sex.race.lm <- lm(income ~ sex + race, data = renamed_nlsy)
+summary(income.sex.race.lm)
+anova(income.sex.lm, income.sex.race.lm) 
+#this shows that the difference without the variable race and with race is significant so an interaction term can formulated
+
+#Step 2: Determining if the interaction term is statistically significant
+lm.sex.race.interact <- lm(income ~ sex + race + sex*race, data = renamed_nlsy)
+summary(lm.sex.race.interact)
+anova(income.sex.race.lm, lm.sex.race.interact)
+#Difference in income gap b/w men and women across racial groups is statistically significant
+#Therefore, sex and race interaction should be added to the lm - contingent on appropriate rationale
+
+#Repeat step 1 and step 2 for all variables to check for possibility of and statistical significance of all possible interaction terms
+
+#Interaction term of sex and marital.status
+income.sex.marital.status.lm <- lm(income ~ sex + marital.status, data = renamed_nlsy)
+summary(income.sex.marital.status.lm)
+anova(income.sex.lm, income.sex.marital.status.lm)
+
+lm.sex.marital.status.interact <- lm(income ~ sex + marital.status + 
+                                             sex*marital.status, data = renamed_nlsy)
+summary(lm.sex.marital.status.interact)
+anova(income.sex.marital.status.lm, lm.sex.marital.status.interact)
+#statistically significant - should be added to the lm contingent on appropriate rationale
+
+#Interaction term of sex and hard.drugs
+income.sex.hard.drugs.lm <- lm(income ~ sex + hard.drugs, data = renamed_nlsy)
+anova(income.sex.lm, income.sex.hard.drugs.lm)
+lm.sex.hard.drugs.interact <- lm(income ~ sex + hard.drugs + 
+                                             sex*hard.drugs, data = renamed_nlsy)
+summary(lm.sex.hard.drugs.interact)
+anova(income.sex.hard.drugs.lm, lm.sex.hard.drugs.interact)
+#statistically insignificant
+
+#Interaction term of sex and hard.times
+colnames(renamed_nlsy)
+
+income.sex.hard.times.lm <- lm(income ~ sex + hard.times, 
+                                        data = renamed_nlsy)
+anova(income.sex.lm, income.sex.hard.times.lm) 
+lm.sex.hard.times.interact <- lm(income ~ sex + hard.times + 
+                                             sex*hard.times, data = renamed_nlsy)
+summary(lm.sex.hard.times.interact)
+anova(income.sex.hard.times.lm, lm.sex.hard.times.interact)
+#statistically insignificant
+
+#Interaction term of sex and highest.degree
+colnames(renamed_nlsy)
+
+income.sex.highest.degree.lm <- lm(income ~ sex + highest.degree, 
+                                        data = renamed_nlsy)
+anova(income.sex.lm, income.sex.highest.degree.lm) 
+lm.sex.highest.degree.interact <- lm(income ~ sex + highest.degree + 
+                                             sex*highest.degree, data = renamed_nlsy)
+summary(lm.sex.highest.degree.interact)
+anova(income.sex.highest.degree.lm, lm.sex.highest.degree.interact)
+#statistically significant - should add to the lm
+
+
+#Interaction term of sex and job.type
+colnames(renamed_nlsy)
+
+income.sex.job.type.lm <- lm(income ~ sex + job.type, 
+                                        data = renamed_nlsy)
+anova(income.sex.lm, income.sex.job.type.lm) 
+lm.sex.job.type.interact <- lm(income ~ sex + job.type + 
+                                             sex*job.type, data = renamed_nlsy)
+summary(lm.sex.job.type.interact)
+anova(income.sex.job.type.lm, lm.sex.job.type.interact)
+#statistically insignificant
+
+#Interaction term of sex and total.incarcerations
+summary(renamed_nlsy$total.incarcerations)
+total.incarcerations.responded <- which(renamed_nlsy$total.incarcerations >= 0)
+renamed_nlsy <- renamed_nlsy[total.incarcerations.responded,]
+income.sex.lm <- lm(income ~ sex, data = renamed_nlsy)
+summary(income.sex.lm)
+income.sex.total.incarcerations.lm <- lm(income ~ sex + total.incarcerations, 
+                                         data = renamed_nlsy)
+summary(income.sex.total.incarcerations.lm)
+anova(income.sex.lm, income.sex.total.incarcerations.lm) #this shows the difference is statistically significant (with and without total.incarcerations, therefore, there is room for an interaction term between sex and total.incarcerations
+lm.sex.total.incarcerations.interact <- lm(income ~ sex + total.incarcerations + 
+                                             sex*total.incarcerations, data = renamed_nlsy)
+summary(lm.sex.total.incarcerations.interact)
+anova(income.sex.total.incarcerations.lm, lm.sex.total.incarcerations.interact)
+#statistically insignificant - but need to fix the factor first
+```
+
+ Interaction Terms
+ a) Checking for statistically significant interactions with variable sex
+
+We checked for interaction of all the variables shortlisted for the final lm with variable sex. We found only 3 interaction terms to be statistically significant:
+1) sex*race
+2) sex*marital.status
+3) sex*highest.degree
+
+#### b) Shortlisting interactions with variable sex to be added to the linear model
+Following is the discussion on the 3 statistically significant interactions with the variable sex, with the purpose of rejecting or accepting participation in the final lm:
+
+1) sex*race: Sex and race appear to have a compounding effect on the income variable.Sex variable has a statistically significant impact on the income, showcased in the income gap between men and women. This income gap can be further impacted by differences in the racial groups, owing to differences in social constraints upon the the different sexes in different racial groups. For example, on average brown women may find themselves impacted considerably greater by domestic and household pressures compared to white women. The former's social set-up requires them to focus on domestic chores and child-rearing and provides brown men greater freedom in pursuing professional careers resulting in a wider income gap. Therefore, it would make sense to include the statistically significant sex and race interaction term in the linear model to check for impact on income gap.
+
+2) sex*highest.degree: Highest degree is an important variable defining education in our linear regression model. It can have a compounded effect along with the sex variable on income. For example, an already disadvantaged sex/gender in terms of income may be further disadvantaged with lower education levels. For similar qualifications women tend to earn less than men in the US, which serves as an indicator of a compounded effect of sex and education on income. One study indicates that the income gap widens with a college degree, that is income gap between men and women with a college degree is wider than the income gap between men and women without a college degree, serving further evidence for the need of an interaction term in our regression model (Day, 2019). Therefore, it would make sense to include the statistically significant sex and highest.degree interaction term in the linear model to check for impact on the income gap. While this seems interesting, we have chosen to ignore it to avoid complexities. 
+
+Sources: Day, J. C. (2019, May 29). College Degree Widens Gender Earnings Gap - U.S. Census Bureau. Retrieved November 13, 2020, from https://www.census.gov/library/stories/2019/05/college-degree-widens-gender-earnings-gap.html
+
+3) sex*marital.status: Some factors of Marital Status were statistically insignificant, causing concern for any misrepresentation of findings prompted by the sex and marital.status interaction term. So it doesnot make sense to include the sex and marital status interaction term, even though statistically significant, in the linear regression model. 
+
+### 5. Discussion 
+```{r, echo = FALSE, message = FALSE}
+#regression
+colnames(renamed_nlsy)
+lm.final <- lm(income ~ sex + race +  sex*race + highest.degree + 
+                 total.incarcerations + marital.status + hard.times +
+                 citizenship + emp_industry_2011 + job.type, data=renamed_nlsy)
+# sex = -11077.6, race = 4444.3
+lm.final.1 <- lm(income ~ sex + marital.status, data=renamed_nlsy)
+summary(lm.final.1)
+```
+
+1. The coefficient of `sexFemale` indicates that females earn **$12,676 **lower that males, which is the baseline in our dataset.
+2. The coefficient for `raceHispanic` indicates that individuals in Hispanic race on average earn **$7,154** more than Black individuals.
+3. The coefficient for `raceNon-Black/ Non-Hispanic` indicates that individuals in this race earn **$10,422** greater than Black individuals.
+4. The coefficient for `total.incarcerations` indicates that for each additional incarceration, the income falls by **$3212**.
+5. The coefficient for `marital.statusMarried` shows that individuals who are married earn **$3,252** more than individuals who are divorced.
+6. The coefficient for `marital.statusNever_married` shows that individuals who are have never gotten married earn **$3,156** less than individuals who are divorced.
+
+7. We can see that the factor level UTILITIES in `emp_industry_2011` (which describes the employment industry)'s coefficient is statistically significant. On average the coefficient increases by $20796 when compared to the baseline of ACS SPECIAL CODE.
+
+8. We can see that the factor level MINING in `emp_industry_2011` (which describes the employment industry)'s coefficient is statistically significant. On average the coefficient increases by $25441 when compared to the baseline of ACS SPECIAL CODE.
+
+9. We can see that the factor level Professional Degree in highest degree (which describes the highest degree a person has attained)'s coefficient is statistically significant. On average the coefficient increases by $37439 when compared to the baseline of Associate Junior College.
+
+10. highest degree's factor PhD is also very significant with a p-value of 4.29e-08. Its coefficient increases by $39296 when compared to the baseline of Associate Junior College.
+
+11. highest degree's factor None is also very significant with a p-value of less than 2e-16. Its coefficient decreases by $18042 when compared to the baseline of Associate Junior College.
+
+12. highest degree's factor Master's degree MA/MS is also very significant with a p-value of less than 2e-16. Its coefficient increases by $18418 when compared to the baseline of Associate Junior College.
+
+13. highest degree's factor High school diploma is also very significant with a p-value of 8.61e-09. Its coefficient decreases by 7967 when compared to the baseline of Associate Junior College.
+
+14. highest degree's factor GED is also very significant with a p-value of 8.01e-15. Its coefficient decreases by 13179 when compared to the baseline of Associate Junior College.
+
+15. highest degree's factor Bachelor's degree is also very significant with a p-value of less than 1.69e-10. Its coefficient increases by 9436 when compared to the baseline of Associate Junior College.
+
+16. The sex and race interaction term gives an interesting perspective in terms of describing the income gap between men and women. The sexFemale:raceHispanic variable and sexFemale:raceNon-Black/Non-Hispanic have coefficients -7575.78 and -8128.30, that are statistically significant at p-value = 0.00025 and p-value = 1.88e-06, respectively. The sexFemale:raceHispanic suggests that the income gap between men and women of the race Hispanic is on average 7575.8 dollars less than the income gap of our baseline race black. The sexFemale:raceNon-Black/Non-Hispanic suggests that the income gap between men and women of the race raceNon-Black / Non-Hispanic is on average 8128.3 dollars less than the income gap of our baseline race black.
+
+All other variables were found to be statistically insignificant at the 0.05 significance level. 
+#### a. Analyzing Diagnostic Plots 
+
+```{r, message = FALSE}
+lm.final <- lm(income ~ sex + race +  sex*race + highest.degree + 
+                 total.incarcerations + marital.status + hard.times +
+                 citizenship + emp_industry_2011 + job.type, data=renamed_nlsy)
+
+plot(lm.final)
+```
+
+
+1. **Residual v/s Fitted**: For every observation in the data, the linear regression model predicts a fitted value. This is basically the estimate of income based on the model which was fit. The residual is the difference between the fitted value and the actual observed value of income. We are interested in assessing the non-linearity here and check whether the constant variance assumption is violated. We can see that the model is a good fit given the average residual as indicated by the red line falls close to 0, showing that the difference between the actual v/s fitted value is minimal.
+
+
+2. **Normal Q-Q plot**: The residuals appear to be following the line well except on the upper tail where there is a clear deviation from normality. This may be a result of having majority of categorical variables in our data which causes our income to take select values only.
+
+3. **Residual v/s Leverage**: A problematic outlier for us would be one which has high residual and high leverage. This means that the point is away from what the line predicts, and has a high influence on the linear model that we fit. However, since we do not have any points lying outside our Cook's distance, there are no points which are concerning outliers for us. 
+
+4. **The scale-location** provides a clearer picture of non-constant variance. The upward sloping line tells us that there is non-constant variance present in the model, or in other words the error of the model is not constant across all observations. Although, ideally we should have a flat line centered at 1 i.e. the ability of the model to predict income does not vary across values. However, the scenario here says that as predicted values get higher so does our error, which may question our inferences.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
