@@ -40,4 +40,3 @@ To view the different components of the project, please click on the hyperlinks 
 * [Data](https://github.com/mhmirza/RAnalytics/blob/main/Final%20Project/nlsy97_Nov2020.csv)
 * [Data Description](https://github.com/mhmirza/RAnalytics/blob/main/Final%20Project/nlsy97_codebook.txt)
 * [R Code](https://github.com/mhmirza/RAnalytics/blob/main/Final%20Project/Final%20Project%20Submission.Rmd)
-* [HTML Output](https://github.com/mhmirza/RAnalytics/blob/main/Final%20Project/Final%20Project%20Submission.html)
