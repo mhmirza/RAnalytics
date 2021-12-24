@@ -22,15 +22,19 @@ III. Statistical Tests: [Homework IV](https://github.com/mhmirza/RAnalytics/tree
 
 # Final Project
 
-**Brief Description:** The Symptom Checker ChatBot - The objective of our project is to create a Python Application that functions like a chatbot and takes user input (based on symptoms) via a series of questions to:
+**Brief Description:** "Sex-related differences: Is there a significant difference in income between men and women? Does the difference vary depending on other factors (e.g., education, marital status, criminal history, drug use, childhood household factors, profession, etc.)?"
 
-1) Obtain a list of diseases from reliable/vetted online sources (use of maximum three web sources based on reliability) most commonly associated with the symptoms shared by the user.
+The main question of interest was answered in the project through the following steps:
 
-2) Allow the user to retrieve more information, such as causes, treatment, a list of over-the-counter medications to alleviate the symptoms, and nearby health facilities based on their location.
+1) Data processing and summarization: Insightful graphical and tabular summaries of the data
 
-3) Provide a reference list of a panel of doctors or hospitals based on user’s location for further review by the user.
+2) Methodology: Dealing with missing values and topcoded variables; exploring trends and correlations; variable selection
 
-To view the different components of the project, please click on the hyperlinks for each part below. Note that the funcionality of the code may require you to add your Google Maps API key instead of the one used here.
+3) Findings: Tabular summaries; graphical Summaries; regression and interpretation of coefficients; assessment of statistical significance
+
+4) Discussion: Potential confounders; model fit limitations; confidence in results for policy makers
+
+To view the different components of the project, please click on the hyperlinks for each part below.
 
 * [Project Prompt](https://github.com/mhmirza/RAnalytics/blob/main/Final%20Project/Final%20Project%20Prompt.pdf)
 * [Data](https://github.com/mhmirza/RAnalytics/blob/main/Final%20Project/nlsy97_Nov2020.csv)
