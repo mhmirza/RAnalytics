@@ -1,3 +1,5 @@
+[Back to Home Page](https://mhmirza.github.io/mhmirza/)
+
 # RAnalytics
 
 This portfolio captures the work I completed for a course, **Programming in R for Analytics**, at Carnegie Mellon University in Fall 2020. The work done here involves: manipulating data objects, producing graphics, analyzing data using common statistical methods, and generating reproducible statistical reports. To view my course repository on GitHub, please click [here](https://github.com/mhmirza/RAnalytics).
